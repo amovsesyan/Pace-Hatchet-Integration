@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<file id="env_mach_specific.xml" version="2.0">
+  <header>
+    These variables control the machine dependent environment including
+    the paths to compilers and libraries external to cime such as netcdf,
+    environment variables for use in the running job should also be set	here.
+    </header>
+  <group id="compliant_values">
+    <entry id="run_exe" value="${EXEROOT}/e3sm.exe ">
+      <type>char</type>
+      <desc>executable name</desc>
+    </entry>
+    <entry id="run_misc_suffix" value=" &gt;&gt; e3sm.log.$LID 2&gt;&amp;1 ">
+      <type>char</type>
+      <desc>redirect for job output</desc>
+    </entry>
+  </group>
+  <module_system type="module">
+    <init_path lang="sh">/gpfs/fs1/soft/chrysalis/spack/opt/spack/linux-centos8-x86_64/gcc-9.3.0/lmod-8.3-5be73rg/lmod/lmod/init/sh</init_path>
+    <init_path lang="csh">/gpfs/fs1/soft/chrysalis/spack/opt/spack/linux-centos8-x86_64/gcc-9.3.0/lmod-8.3-5be73rg/lmod/lmod/init/csh</init_path>
+    <init_path lang="python">/gpfs/fs1/soft/chrysalis/spack/opt/spack/linux-centos8-x86_64/gcc-9.3.0/lmod-8.3-5be73rg/lmod/lmod/init/env_modules_python.py</init_path>
+    <cmd_path lang="python">/gpfs/fs1/soft/chrysalis/spack/opt/spack/linux-centos8-x86_64/gcc-9.3.0/lmod-8.3-5be73rg/lmod/lmod/libexec/lmod python</cmd_path>
+    <cmd_path lang="sh">module</cmd_path>
+    <cmd_path lang="csh">module</cmd_path>
+    <modules>
+      <command name="purge"/>
+      <command name="load">subversion/1.14.0-e4smcy3</command>
+      <command name="load">perl/5.32.0-bsnc6lt</command>
+      <command name="load">cmake/3.24.2-whgdv7y</command>
+    </modules>
+    <modules compiler="intel">
+      <command name="load">intel/20.0.4-kodw73g</command>
+      <command name="load">intel-mkl/2020.4.304-g2qaxzf</command>
+    </modules>
+    <modules compiler="intel" mpilib="openmpi">
+      <command name="load">openmpi/4.1.6-2mm63n2</command>
+      <command name="load">hdf5/1.10.7-4cghwvq</command>
+      <command name="load">netcdf-c/4.4.1-a4hji6e</command>
+      <command name="load">netcdf-cxx/4.2-ldoxr43</command>
+      <command name="load">netcdf-fortran/4.4.4-husened</command>
+      <command name="load">parallel-netcdf/1.11.0-icrpxty</command>
+    </modules>
+    <modules compiler="intel" mpilib="impi">
+      <command name="load">intel-mpi/2019.9.304-tkzvizk</command>
+      <command name="load">hdf5/1.8.16-se4xyo7</command>
+      <command name="load">netcdf-c/4.4.1-qvxyzq2</command>
+      <command name="load">netcdf-cxx/4.2-binixgj</command>
+      <command name="load">netcdf-fortran/4.4.4-rdxohvp</command>
+      <command name="load">parallel-netcdf/1.11.0-b74wv4m</command>
+    </modules>
+    <modules compiler="gnu">
+      <command name="load">gcc/9.2.0-ugetvbp</command>
+      <command name="load">intel-mkl/2020.4.304-n3b5fye</command>
+    </modules>
+    <modules compiler="gnu" mpilib="openmpi">
+      <command name="load">openmpi/4.1.3-sxfyy4k</command>
+      <command name="load">hdf5/1.10.7-j3zxncu</command>
+      <command name="load">netcdf-c/4.4.1-7ohuiwq</command>
+      <command name="load">netcdf-cxx/4.2-tkg465k</command>
+      <command name="load">netcdf-fortran/4.4.4-k2zu3y5</command>
+      <command name="load">parallel-netcdf/1.11.0-mirrcz7</command>
+    </modules>
+    <modules compiler="gnu" mpilib="impi">
+      <command name="load">intel-mpi/2019.9.304-jdih7h5</command>
+      <command name="load">hdf5/1.8.16-dtbpce3</command>
+      <command name="load">netcdf-c/4.4.1-zcoa44z</command>
+      <command name="load">netcdf-cxx/4.2-ayxg4c7</command>
+      <command name="load">netcdf-fortran/4.4.4-2lfr2lr</command>
+      <command name="load">parallel-netcdf/1.11.0-ifdodru</command>
+    </modules>
+    <modules compiler="oneapi-ifx">
+      <command name="load">intel-oneapi-compilers/2022.2.0-dioefq5</command>
+      <command name="load">intel-oneapi-mkl/2022.2.0-w2y75l6</command>
+    </modules>
+    <modules compiler="oneapi-ifx" mpilib="openmpi">
+      <command name="load">openmpi/4.1.3-ti25nay</command>
+      <command name="load">hdf5/1.10.7-clocd2t</command>
+      <command name="load">netcdf-c/4.7.4-nw7dztf</command>
+      <command name="load">netcdf-fortran/4.5.3-qa6rhpj</command>
+      <command name="load">parallel-netcdf/1.11.0-ejxy7kk</command>
+    </modules>
+  </module_system>
+  <environment_variables>
+    <env name="PERL5LIB">/lcrc/group/e3sm/soft/perl/chrys/lib/perl5</env>
+    <env name="NETCDF_C_PATH">$SHELL{dirname $(dirname $(which nc-config))}</env>
+    <env name="NETCDF_FORTRAN_PATH">$SHELL{dirname $(dirname $(which nf-config))}</env>
+    <env name="PNETCDF_PATH">$SHELL{dirname $(dirname $(which pnetcdf_version))}</env>
+    <env name="OMPI_MCA_sharedfp">^lockedfile,individual</env>
+    <env name="UCX_TLS">^xpmem</env>
+  </environment_variables>
+  <environment_variables BUILD_THREADED="TRUE">
+    <env name="OMP_STACKSIZE">128M</env>
+  </environment_variables>
+  <environment_variables BUILD_THREADED="TRUE" MAX_TASKS_PER_NODE="!128" compiler="intel">
+    <env name="KMP_AFFINITY">granularity=core,balanced</env>
+  </environment_variables>
+  <environment_variables BUILD_THREADED="TRUE" MAX_TASKS_PER_NODE="128" compiler="intel">
+    <env name="KMP_AFFINITY">granularity=thread,balanced</env>
+  </environment_variables>
+  <environment_variables BUILD_THREADED="TRUE" compiler="gnu">
+    <env name="OMP_PLACES">cores</env>
+  </environment_variables>
+  <environment_variables compiler="intel" mpilib="openmpi">
+    <env name="MOAB_ROOT">$SHELL{if [ -z "$MOAB_ROOT" ]; then echo /lcrc/soft/climate/moab/chrysalis/intel; else echo "$MOAB_ROOT"; fi}</env>
+  </environment_variables>
+  <environment_variables compiler="gnu" mpilib="openmpi">
+    <env name="MOAB_ROOT">$SHELL{if [ -z "$MOAB_ROOT" ]; then echo /lcrc/soft/climate/moab/chrysalis/gnu; else echo "$MOAB_ROOT"; fi}</env>
+  </environment_variables>
+  <environment_variables compiler="gnu">
+    <env name="Albany_ROOT">$SHELL{if [ -z "$Albany_ROOT" ]; then echo /lcrc/group/e3sm/ac.jwatkins/LandIce/AlbanyBuilds/build-gcc-sfad12-e3sm/install; else echo "$Albany_ROOT"; fi}</env>
+    <env name="Trilinos_ROOT">$SHELL{if [ -z "$Trilinos_ROOT" ]; then echo /lcrc/group/e3sm/ac.jwatkins/LandIce/TrilinosBuilds/build-gcc-e3sm/install; else echo "$Trilinos_ROOT"; fi}</env>
+    <env name="Kokkos_ROOT">$SHELL{if [ -z "$Kokkos_ROOT" ]; then echo /lcrc/group/e3sm/ac.jwatkins/LandIce/TrilinosBuilds/build-gcc-e3sm/install; else echo "$Kokkos_ROOT"; fi}</env>
+  </environment_variables>
+  <mpirun mpilib="default">
+    <executable>srun</executable>
+    <arguments>
+      <arg name="num_tasks">--mpi=pmi2 -l -n {{ total_tasks }} -N {{ num_nodes }} --kill-on-bad-exit </arg>
+      <arg name="binding"> $SHELL{if [ 64 -ge `./xmlquery --value MAX_MPITASKS_PER_NODE` ]; then echo "--cpu_bind=cores"; else echo "--cpu_bind=threads";fi;} </arg>
+      <arg name="thread_count">-c $SHELL{echo 128/ {{ tasks_per_node }} |bc}</arg>
+      <arg name="placement">-m plane={{ tasks_per_node }}</arg>
+    </arguments>
+  </mpirun>
+</file>

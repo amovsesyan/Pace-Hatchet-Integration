@@ -1,0 +1,13 @@
+&modelio
+  diri = "/lcrc/group/e3sm/ac.fspereira/scratch/anvil/20240519_icos30_JRAp5_wISC30E3r5_LARI/bld/lnd"
+  diro = "/lcrc/group/e3sm/ac.fspereira/scratch/anvil/20240519_icos30_JRAp5_wISC30E3r5_LARI/run"
+  logfile = "lnd.log.674356.240707-220957"
+/
+&pio_inparm
+  pio_netcdf_format = "64bit_offset"
+  pio_numiotasks = -99
+  pio_rearranger = 1
+  pio_root = 0
+  pio_stride = 36
+  pio_typename = "pnetcdf"
+/

@@ -1,0 +1,13 @@
+&modelio
+  diri = "/lcrc/group/e3sm/ac.ngmahfouz/E3SMv3/v3.LR.F2010.minCDNC00.DMSx80.PI/build/wav"
+  diro = "/lcrc/group/e3sm/ac.ngmahfouz/E3SMv3/v3.LR.F2010.minCDNC00.DMSx80.PI/run"
+  logfile = "wav.log.547560.240707-204848"
+/
+&pio_inparm
+  pio_netcdf_format = "64bit_offset"
+  pio_numiotasks = -99
+  pio_rearranger = 1
+  pio_root = 0
+  pio_stride = 64
+  pio_typename = "pnetcdf"
+/

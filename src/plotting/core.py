@@ -253,8 +253,8 @@ def timeline(trace_events, start_time, end_time, show_depth=False, instant_event
     p.on_event(RangesUpdate, update_cds)
 
     # Move legend to the right
-    p.add_layout(p.legend[0], "below")
-    p.legend.orientation = "horizontal"
+    p.add_layout(p.legend[0], "right")
+    p.legend.orientation = "vertical"
     p.legend.location = "center"
 
     # Make initial call to our callback
@@ -333,15 +333,15 @@ def timeline(trace_events, start_time, end_time, show_depth=False, instant_event
 
 
     # Return plot with wrapper function
-    output_file("timeline.html")
+    # output_file("timeline.html")
     # save(p)
     # show(p)
     # row(p, depth_slider)
     if events['_depth'].max() > 0:
-        return plot(row(p, depth_slider))
+        return plot(column(p, depth_slider))
     else:
-        return row(p)
-    plot(row(p, depth_slider))
+        return p
+    # plot(column(p, depth_slider))
     # return row(p,depth_slider)
     
     # return plot(column(p, sizing_mode="stretch_width"))
@@ -560,10 +560,11 @@ def profile_trace_view(gf: GraphFrame):
     trace_df = trace_df.loc[trace_df['_depth'] < 6]
     print(trace_df)
     p = timeline(trace_df, 0, last_end_time, show_depth=False)
-    show(p)
+    # show(p)
+    return p
 
-    gf.calculate_exclusive_metrics('Wallclock')
-    print(gf.tree(metric_column='Wallclock (exc)'))
+    # gf.calculate_exclusive_metrics('Wallclock')
+    # print(gf.tree(metric_column='Wallclock (exc)'))
 
 
             

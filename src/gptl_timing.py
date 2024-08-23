@@ -6,7 +6,7 @@ import os
 import urllib.request
 from contextlib import contextmanager
 from hatchet import GraphFrame
-from plotting.core import profile_timeline
+from plotting.core import profile_timeline, operation_histogram, profile_trace_view
 @contextmanager
 def temporary_change_dir(new_dir):
     original_dir = os.getcwd()  # Save the current working directory
@@ -72,7 +72,7 @@ class GPTL_Timing:
         return gf
 
 
-def get_profile_timeline(exp_ids: [int], group_by: str, compare: str):
+def get_profile_timeline(exp_ids: [int], group_by: str = 'name', compare: str = 'wallmax (inc)'):
     cases = []
     for exp_id in exp_ids:
         cases.append(GPTL_Timing(exp_id))
@@ -81,3 +81,17 @@ def get_profile_timeline(exp_ids: [int], group_by: str, compare: str):
     p1 = profile_timeline(intersect, group_by, compared_columns)
     return p1
 
+def get_operation_histogram(exp_ids: [int], group_by: str = 'name', compare: str = 'wallmax (inc)'):
+    cases = []
+    for exp_id in exp_ids:
+        cases.append(GPTL_Timing(exp_id))
+    intersect: GraphFrame = GraphFrame.intersect([case.graphframe for case in cases], [case.exp_id + ' ' for case in cases])
+    compared_columns = [str(case.exp_id) + ' ' + compare for case in cases]
+    
+    p1 = operation_histogram(intersect, group_by, compared_columns)
+    return p1
+
+def get_profile_trace_view(exp_id: int, metric: str = 'wallmax (inc)', filter_scale: float = 0.02):
+    case = GPTL_Timing(exp_id)
+    p1 = profile_trace_view(case.graphframe, metric, filter_scale)
+    return p1

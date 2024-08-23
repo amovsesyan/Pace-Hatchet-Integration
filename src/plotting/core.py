@@ -348,17 +348,17 @@ def timeline(trace_events, start_time, end_time, show_depth=False, instant_event
     # return plot(column(p, select, sizing_mode="stretch_width"))
 
 
-def operation_histogram(gf: GraphFrame, group_by_column: str = 'name', compared_column: [str] = ['time (inc)']):
+def operation_histogram(gf: GraphFrame, group_by_column: str = 'name', compared_column: [str] = ['time (inc)'], num_cols: int = 15):
     """Displays the result of Trace.message_histogram as a bar graph
 
     The heights of the bars represent the frequency of messages per size range."""
     # hist, edges = trace.message_histogram(**kwargs)
 
-    # define number of functions to look at
-    num_comp = 5
-
     # FIRST: Get Flat Profile
-    flat_profile: pd.DataFrame = gf.flat_profile(group_by_column).head(num_comp)
+    if num_cols is not None:
+        flat_profile: pd.DataFrame = gf.flat_profile(group_by_column).head(num_cols)
+    else:
+        flat_profile: pd.DataFrame = gf.flat_profile(group_by_column)
     flat_profile = flat_profile[compared_column]
     max_val = flat_profile.max(numeric_only=True).max()
 
@@ -396,6 +396,8 @@ def operation_histogram(gf: GraphFrame, group_by_column: str = 'name', compared_
     p.ygrid.grid_line_color = None
     p.legend.location = "top_left"
     p.legend.orientation = "horizontal"
+    # make scrollable
+    p.sizing_mode = 'stretch_width'
     p.add_tools(HoverTool(
         tooltips=[
             # specify the group
@@ -422,8 +424,6 @@ def profile_timeline(gf: GraphFrame, group_by_column: str = 'name', compared_col
 
     # so our df will have the following columns:
     # column_name, operation_name, total_time, start_time, end_time, depth
-
-    # trace_df = pd.DataFrame(columns=['column_name', 'group_name', 'total_time', 'start_time', 'end_time', 'depth'])
 
     flat_profile: pd.DataFrame = gf.flat_profile(groupby_column=group_by_column).sort_values(by=compared_column[0], ascending=False)
     flat_profile = flat_profile[compared_column]
@@ -484,10 +484,10 @@ def profile_timeline(gf: GraphFrame, group_by_column: str = 'name', compared_col
     })
     return timeline(trace_df, 0, last_end_time, show_depth=True)
 
-def profile_trace_view(gf: GraphFrame):
-    # filter gf to take out lowest 2%
-    cuttoff = gf.dataframe['Wallclock'].max() * 0.02
-    gf = gf.filter(lambda x: x['Wallclock'] > cuttoff)
+def profile_trace_view(gf: GraphFrame, compared_column: 'str' = 'wallmax (inc)', filter_scale: float = 0.02):
+    # filter gf to take out lowest filter_scale%
+    cuttoff = gf.dataframe[compared_column].max() * filter_scale
+    gf = gf.filter(lambda x: x[compared_column] > cuttoff)
     # we will produce a trace like view of the profile/graphframe
     column_names = []
     group_names = []
@@ -502,7 +502,7 @@ def profile_trace_view(gf: GraphFrame):
         # print(node)
         # print(gf.dataframe.loc[node]['name'])
         # print(gf.dataframe.loc[node]['time (inc)'])
-        time = gf.dataframe.loc[node]['Wallclock']
+        time = gf.dataframe.loc[node][compared_column]
         current_index = len(depths)
 
         parent_time = total_times[parent_index]
@@ -511,7 +511,7 @@ def profile_trace_view(gf: GraphFrame):
         end_time = start_time + time
         depth = depths[parent_index] + 1
 
-        column_names.append('Wallclock')
+        column_names.append(compared_column)
         group_names.append(gf.dataframe.loc[node]['name'])
         total_times.append(time)
         start_times.append(start_time)
@@ -523,22 +523,22 @@ def profile_trace_view(gf: GraphFrame):
         for child in node.children:
             traverse(child, current_index)
     def calc_offsets(node):
-        parent_time = gf.dataframe.loc[node]['Wallclock']
+        parent_time = gf.dataframe.loc[node][compared_column]
         child_times = 0
         for child in node.children:
-            child_times += gf.dataframe.loc[child]['Wallclock']
+            child_times += gf.dataframe.loc[child][compared_column]
         return (parent_time - child_times) / (len(node.children) + 1)
     last_end_time = 0
     for root_node in gf.graph.roots:
         # print(root_node)
         # print(gf.dataframe.loc[root_node])
-        # print(gf.dataframe.loc[root_node]['Wallclock'])
+        # print(gf.dataframe.loc[root_node][compared_column])
         # # print(gf.graph[root_node])
         current_index = len(depths)
         start_time = last_end_time
-        time = gf.dataframe.loc[root_node]['Wallclock']
+        time = gf.dataframe.loc[root_node][compared_column]
         end_time = start_time + time
-        column_names.append('Wallclock')
+        column_names.append(compared_column)
         group_names.append(gf.dataframe.loc[root_node]['name'])
         total_times.append(time)
         start_times.append(start_time)

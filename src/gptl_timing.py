@@ -81,14 +81,14 @@ def get_profile_timeline(exp_ids: [int], group_by: str = 'name', compare: str = 
     p1 = profile_timeline(intersect, group_by, compared_columns)
     return p1
 
-def get_operation_histogram(exp_ids: [int], group_by: str = 'name', compare: str = 'wallmax (inc)'):
+def get_operation_histogram(exp_ids: [int], group_by: str = 'name', compare: str = 'wallmax (inc)', num_cols: int = 15):
     cases = []
     for exp_id in exp_ids:
         cases.append(GPTL_Timing(exp_id))
     intersect: GraphFrame = GraphFrame.intersect([case.graphframe for case in cases], [case.exp_id + ' ' for case in cases])
     compared_columns = [str(case.exp_id) + ' ' + compare for case in cases]
     
-    p1 = operation_histogram(intersect, group_by, compared_columns)
+    p1 = operation_histogram(intersect, group_by, compared_columns, num_cols)
     return p1
 
 def get_profile_trace_view(exp_id: int, metric: str = 'wallmax (inc)', filter_scale: float = 0.02):
